@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SysAgent Dashboard - DESKTOP-REA13MD</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap');
+        
+        :root {
+            --bg-color: #0b0f19;
+            --card-bg: rgba(22, 29, 49, 0.7);
+            --border-color: rgba(255, 255, 255, 0.08);
+            --text-main: #f3f4f6;
+            --text-secondary: #9ca3af;
+            --primary: #3b82f6;
+            --primary-glow: rgba(59, 130, 246, 0.35);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            background-image: radial-gradient(circle at 10% 20%, rgba(20, 30, 60, 0.6) 0%, rgba(10, 15, 25, 0.9) 80%);
+            color: var(--text-main);
+            font-family: 'Outfit', sans-serif;
+            line-height: 1.6;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Header section */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 25px;
+            margin-bottom: 35px;
+        }
+
+        .brand h1 {
+            font-size: 2.2rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #60a5fa 30%, #3b82f6 90%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.5px;
+        }
+
+        .brand p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            margin-top: 4px;
+        }
+
+        .status-badge {
+            background: rgba(16, 185, 129, 0.15);
+            border: 1px solid #10b981;
+            color: #10b981;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background-color: #10b981;
+            border-radius: 50%;
+            display: inline-block;
+            box-shadow: 0 0 8px #10b981;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(0.95); opacity: 0.5; }
+            50% { transform: scale(1.1); opacity: 1; }
+            100% { transform: scale(0.95); opacity: 0.5; }
+        }
+
+        /* Grid layouts */
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 25px;
+            margin-bottom: 35px;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(480px, 1fr));
+            gap: 25px;
+            margin-bottom: 35px;
+        }
+
+        /* Card stylings */
+        .card {
+            background: var(--card-bg);
+            backdrop-filter: blur(8px);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 25px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 15px 30px rgba(59, 130, 246, 0.1);
+            border-color: rgba(59, 130, 246, 0.2);
+        }
+
+        .card h3 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            padding-bottom: 10px;
+        }
+
+        /* Metrics key-value rows */
+        .metric-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+            font-size: 0.95rem;
+        }
+
+        .metric-row:last-child {
+            border-bottom: none;
+        }
+
+        .metric-label {
+            color: var(--text-secondary);
+        }
+
+        .metric-value {
+            font-weight: 600;
+            color: var(--text-main);
+        }
+
+        /* Progress bars */
+        .progress-container {
+            background: rgba(255, 255, 255, 0.05);
+            height: 16px;
+            border-radius: 8px;
+            position: relative;
+            overflow: hidden;
+            margin-top: 8px;
+        }
+
+        .progress-bar {
+            height: 100%;
+            border-radius: 8px;
+            transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .progress-text {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: #ffffff;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.8);
+        }
+
+        /* Tables styling */
+        .table-card {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            font-size: 0.9rem;
+        }
+
+        th {
+            color: var(--text-secondary);
+            font-weight: 600;
+            padding: 12px;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.08);
+        }
+
+        td {
+            padding: 14px 12px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+            color: var(--text-main);
+        }
+
+        tr:hover td {
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        code {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 3px 6px;
+            border-radius: 4px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.85rem;
+            color: #60a5fa;
+        }
+
+        /* Badges */
+        .badge {
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .badge-success {
+            background: rgba(16, 185, 129, 0.15);
+            color: #10b981;
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+
+        .badge-danger {
+            background: rgba(239, 68, 68, 0.15);
+            color: #ef4444;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+
+        .badge-warning {
+            background: rgba(245, 158, 11, 0.15);
+            color: #f59e0b;
+            border: 1px solid rgba(245, 158, 11, 0.3);
+        }
+
+        /* Alerts engine styling */
+        .alert-box {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 12px;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .alert-critical {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            color: #fca5a5;
+        }
+
+        .alert-warning {
+            background: rgba(245, 158, 11, 0.1);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            color: #fde047;
+        }
+
+        .alert-success {
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            color: #a7f3d0;
+        }
+
+        ul {
+            list-style-position: inside;
+            color: var(--text-main);
+            padding-left: 10px;
+        }
+
+        li {
+            margin-bottom: 8px;
+            font-size: 0.95rem;
+        }
+
+        footer {
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            border-top: 1px solid var(--border-color);
+            padding-top: 25px;
+            margin-top: 50px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="brand">
+                <h1>SysAgent Dashboard</h1>
+                <p>Host: DESKTOP-REA13MD | OS: Windows | Uptime: 1 day, 18 hours, 40 minutes</p>
+            </div>
+            <div class="status-badge">
+                <span class="status-dot"></span> SECURE MODE
+            </div>
+        </header>
+
+        <!-- System overview metrics (Gauge cards) -->
+        <div class="grid-3">
+            <!-- CPU Card -->
+            <div class="card">
+                <h3>🖥️ CPU Utilization</h3>
+                <div class="metric-row">
+                    <span class="metric-label">Model</span>
+                    <span class="metric-value" style="font-size:0.85rem; text-align:right; max-width:70%;">13th Gen Intel(R) Core(TM) i5-1340P</span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-label">Cores</span>
+                    <span class="metric-value">12 Cores (16 Logical)</span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-label">Total Load</span>
+                    <span class="metric-value" style="color:#10b981;">40.6%</span>
+                </div>
+                <div class="progress-container">
+                    <div class="progress-bar" style="width: 40.6%; background: #10b981;"></div>
+                    <span class="progress-text">40.6%</span>
+                </div>
+            </div>
+
+            <!-- Memory Card -->
+            <div class="card">
+                <h3>💾 System RAM</h3>
+                <div class="metric-row">
+                    <span class="metric-label">Total Memory</span>
+                    <span class="metric-value">15.69 GB</span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-label">Used RAM</span>
+                    <span class="metric-value">14.63 GB</span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-label">Usage Percentage</span>
+                    <span class="metric-value" style="color:#ef4444;">93.3%</span>
+                </div>
+                <div class="progress-container">
+                    <div class="progress-bar" style="width: 93.3%; background: #ef4444;"></div>
+                    <span class="progress-text">93.3%</span>
+                </div>
+            </div>
+
+            <!-- Operating System Card -->
+            <div class="card">
+                <h3>⚙️ System details</h3>
+                <div class="metric-row"><span>OS Architecture</span><span>X86_64</span></div>
+                <div class="metric-row"><span>OS Build</span><span style="font-size:0.8rem;">10.0.26200</span></div>
+                <div class="metric-row"><span>Kernel Version</span><span style="font-size:0.8rem;">10</span></div>
+                <div class="metric-row"><span>Timezone</span><span>India Standard Time</span></div>
+            </div>
+        </div>
+
+        <!-- GPU & Battery Row (if active) -->
+        <div class="grid-2">
+            
+            <div class="card">
+                <h3>🎮 Graphics Processor (GPU)</h3>
+                <h4 style="margin: 5px 0 15px 0; color: #60a5fa;">Intel(R) Iris(R) Xe Graphics</h4>
+                <div class="metric-row"><span>Vendor</span><span>Intel</span></div>
+                <div class="metric-row"><span>Driver Version</span><span>32.0.101.7084</span></div>
+                <div class="metric-row"><span>VRAM Total</span><span>2048.0 MB</span></div>
+                <div class="metric-row"><span>VRAM Used</span><span>Unknown MB</span></div>
+                <div class="metric-row"><span>Temperature</span><span>Unknown°C</span></div>
+                <div class="metric-row"><span>GPU Load</span><span>Unknown%</span></div>
+            </div>
+            
+            
+        <div class="card">
+            <h3>🔋 Battery Status</h3>
+            <div class="metric-row">
+                <span class="metric-label">Charge level</span>
+                <span class="metric-value">63%</span>
+            </div>
+            <div class="progress-container" style="margin-bottom: 15px;">
+                <div class="progress-bar" style="width: 63%; background: #f59e0b;"></div>
+            </div>
+            <p><strong>Status:</strong> Discharging | <strong>Time remaining:</strong> 1h 47m</p>
+            <p><strong>Cycles:</strong> N/A</p>
+        </div>
+        
+        </div>
+
+        <!-- Storage & Disks -->
+        <div class="card table-card" style="margin-bottom: 35px;">
+            <h3>💽 Hard Drive Partitions & Mountpoints</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Device</th>
+                        <th>Mountpoint</th>
+                        <th>File System</th>
+                        <th>Used %</th>
+                        <th>Capacity</th>
+                        <th>Free Space</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+        <tr>
+            <td><code>C:\</code></td>
+            <td><code>C:\</code></td>
+            <td>NTFS</td>
+            <td>
+                <div class="progress-container">
+                    <div class="progress-bar" style="width: 91.7%; background: #ef4444;"></div>
+                    <span class="progress-text">91.7%</span>
+                </div>
+            </td>
+            <td>304.87 GB</td>
+            <td>25.42 GB</td>
+        </tr>
+        
+
+        <tr>
+            <td><code>E:\</code></td>
+            <td><code>E:\</code></td>
+            <td>NTFS</td>
+            <td>
+                <div class="progress-container">
+                    <div class="progress-bar" style="width: 23.9%; background: #10b981;"></div>
+                    <span class="progress-text">23.9%</span>
+                </div>
+            </td>
+            <td>150.0 GB</td>
+            <td>114.08 GB</td>
+        </tr>
+        
+                </tbody>
+            </table>
+            <div class="metric-row" style="margin-top: 15px; border:none; padding: 0;">
+                <span class="metric-label"><strong>SMART Hardware Status:</strong></span>
+                <span class="metric-value" style="color: #60a5fa;">Not available (smartmontools not installed)</span>
+            </div>
+        </div>
+
+        <!-- Security alerts box -->
+        <div class="grid-2">
+            <div class="card">
+                <h3>🛡️ Security Audit & Threat Center</h3>
+                
+        <div class="alert-box alert-success">
+            <strong>SECURE:</strong> No critical vulnerabilities, exposed ports, or world-writable files identified.
+        </div>
+        
+                <div style="margin-top: 20px;">
+                    <p style="font-size: 0.9rem; color: var(--text-secondary);">
+                        <strong>Local Admins:</strong> 
+                    </p>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>📦 Software & Build Environment</h3>
+                <div class="metric-row"><span>Python Runtime</span><span>3.11.5</span></div>
+                <div class="metric-row"><span>Active Virtualenv</span><span><code>None (Global System)</code></span></div>
+                <div class="metric-row"><span>Git Version</span><span>git version 2.41.0.windows.1</span></div>
+                <h4 style="margin: 15px 0 10px 0; font-size: 1rem;">Developer tools versions:</h4>
+                <ul style="margin-bottom: 15px;">
+                    <li><strong>Node:</strong> v22.19.0</li>
+<li><strong>Npm:</strong> Not installed</li>
+<li><strong>Rust:</strong> Not installed</li>
+<li><strong>Go:</strong> go version go1.26.3 windows/amd64</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Network Adaptors and Traffic -->
+        <div class="card table-card" style="margin-bottom: 35px;">
+            <h3>🌐 Network Adapters & Configurations</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Interface Name</th>
+                        <th>Status</th>
+                        <th>IP Address</th>
+                        <th>MAC Address</th>
+                        <th>Data Sent</th>
+                        <th>Data Received</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+        <tr>
+            <td><strong>Local Area Connection* 8</strong></td>
+            <td><span class="badge badge-danger">DOWN</span></td>
+            <td>169.254.149.78</td>
+            <td><code>D4-D8-53-E3-00-CC</code></td>
+            <td>0.0 MB</td>
+            <td>0.0 MB</td>
+        </tr>
+        
+
+        <tr>
+            <td><strong>Local Area Connection* 10</strong></td>
+            <td><span class="badge badge-danger">DOWN</span></td>
+            <td>169.254.192.47</td>
+            <td><code>D6-D8-53-E3-00-CB</code></td>
+            <td>0.0 MB</td>
+            <td>0.0 MB</td>
+        </tr>
+        
+
+        <tr>
+            <td><strong>VMware Network Adapter VMnet1</strong></td>
+            <td><span class="badge badge-success">UP</span></td>
+            <td>192.168.16.1</td>
+            <td><code>00-50-56-C0-00-01</code></td>
+            <td>0.0 MB</td>
+            <td>0.0 MB</td>
+        </tr>
+        
+
+        <tr>
+            <td><strong>VMware Network Adapter VMnet8</strong></td>
+            <td><span class="badge badge-success">UP</span></td>
+            <td>192.168.11.1</td>
+            <td><code>00-50-56-C0-00-08</code></td>
+            <td>0.0 MB</td>
+            <td>0.0 MB</td>
+        </tr>
+        
+
+        <tr>
+            <td><strong>Wi-Fi</strong></td>
+            <td><span class="badge badge-success">UP</span></td>
+            <td>10.92.148.173</td>
+            <td><code>D4-D8-53-E3-00-CB</code></td>
+            <td>303.22 MB</td>
+            <td>9311.2 MB</td>
+        </tr>
+        
+
+        <tr>
+            <td><strong>Bluetooth Network Connection</strong></td>
+            <td><span class="badge badge-danger">DOWN</span></td>
+            <td>169.254.208.156</td>
+            <td><code>D4-D8-53-E3-00-CF</code></td>
+            <td>0.0 MB</td>
+            <td>0.0 MB</td>
+        </tr>
+        
+
+        <tr>
+            <td><strong>Local Area Connection</strong></td>
+            <td><span class="badge badge-danger">DOWN</span></td>
+            <td>169.254.121.20</td>
+            <td><code>N/A</code></td>
+            <td>0.0 MB</td>
+            <td>0.0 MB</td>
+        </tr>
+        
+
+        <tr>
+            <td><strong>Win</strong></td>
+            <td><span class="badge badge-success">UP</span></td>
+            <td>172.30.4.44</td>
+            <td><code>N/A</code></td>
+            <td>0.02 MB</td>
+            <td>0.01 MB</td>
+        </tr>
+        
+
+        <tr>
+            <td><strong>Loopback Pseudo-Interface 1</strong></td>
+            <td><span class="badge badge-success">UP</span></td>
+            <td>127.0.0.1</td>
+            <td><code>N/A</code></td>
+            <td>0.0 MB</td>
+            <td>0.0 MB</td>
+        </tr>
+        
+                </tbody>
+            </table>
+            <div class="metric-row" style="margin-top: 15px; border:none; padding: 0;">
+                <span class="metric-label"><strong>DNS Servers Configured:</strong></span>
+                <span class="metric-value">10.92.148.35</span>
+            </div>
+        </div>
+
+        <!-- Processes Cards -->
+        <div class="grid-2">
+            <!-- Top CPU -->
+            <div class="card table-card">
+                <h3>🔥 Top 5 CPU Processes</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>PID</th>
+                            <th>Process Name</th>
+                            <th>CPU %</th>
+                            <th>Memory %</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        
+        <tr>
+            <td>0</td>
+            <td><code>System Idle Process</code></td>
+            <td style="color: #ef4444; font-weight: 600;">0.0%</td>
+            <td>0.0%</td>
+        </tr>
+        
+
+        <tr>
+            <td>4</td>
+            <td><code>System</code></td>
+            <td style="color: #ef4444; font-weight: 600;">0.0%</td>
+            <td>0.0%</td>
+        </tr>
+        
+
+        <tr>
+            <td>8</td>
+            <td><code>svchost.exe</code></td>
+            <td style="color: #ef4444; font-weight: 600;">0.0%</td>
+            <td>0.1%</td>
+        </tr>
+        
+
+        <tr>
+            <td>236</td>
+            <td><code>Unknown</code></td>
+            <td style="color: #ef4444; font-weight: 600;">0.0%</td>
+            <td>0.4%</td>
+        </tr>
+        
+
+        <tr>
+            <td>280</td>
+            <td><code>Registry</code></td>
+            <td style="color: #ef4444; font-weight: 600;">0.0%</td>
+            <td>0.16%</td>
+        </tr>
+        
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Top Memory -->
+            <div class="card table-card">
+                <h3>💡 Top 5 Memory Processes</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>PID</th>
+                            <th>Process Name</th>
+                            <th>Memory %</th>
+                            <th>CPU %</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        
+        <tr>
+            <td>4244</td>
+            <td><code>MemCompression</code></td>
+            <td style="color: #f59e0b; font-weight: 600;">9.63%</td>
+            <td>0.0%</td>
+        </tr>
+        
+
+        <tr>
+            <td>2220</td>
+            <td><code>brave.exe</code></td>
+            <td style="color: #f59e0b; font-weight: 600;">4.97%</td>
+            <td>0.0%</td>
+        </tr>
+        
+
+        <tr>
+            <td>7900</td>
+            <td><code>brave.exe</code></td>
+            <td style="color: #f59e0b; font-weight: 600;">4.34%</td>
+            <td>0.0%</td>
+        </tr>
+        
+
+        <tr>
+            <td>28668</td>
+            <td><code>brave.exe</code></td>
+            <td style="color: #f59e0b; font-weight: 600;">4.22%</td>
+            <td>0.0%</td>
+        </tr>
+        
+
+        <tr>
+            <td>11548</td>
+            <td><code>Antigravity IDE.exe</code></td>
+            <td style="color: #f59e0b; font-weight: 600;">3.18%</td>
+            <td>0.0%</td>
+        </tr>
+        
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <footer>
+            <p>Generated by SysAgent - AI System Intelligence Assistant. Local and Sandboxed execution model.</p>
+        </footer>
+    </div>
+</body>
+</html>

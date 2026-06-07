@@ -1,0 +1,9 @@
+dist/
+build/
+*.egg-info/
+__pycache__/
+.env
+.env.example
+*.pyc
+.pytest_cache/
+~/.sysagent/
