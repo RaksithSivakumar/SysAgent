@@ -207,14 +207,9 @@ def scan(
 @app.command()
 def ask(question: str):
     """Queries Google Gemini with a system prompt and streams real-time responses."""
+    from sysagent.cli.interactive import run_query_with_animations
     agent = GeminiAgent()
-    console.print(f"[dim]SysAgent is thinking using model: {agent.config.model}...[/dim]")
-    
-    # Run the streaming agentic loop
-    for chunk in agent.agentic_loop(question):
-        # We print directly to stdout to keep streaming feel
-        sys.stdout.write(chunk)
-        sys.stdout.flush()
+    run_query_with_animations(agent, question)
     print()
 
 @app.command()

@@ -93,7 +93,8 @@ class GeminiAgent:
                     fn_args = dict(call.args)
                     
                     logger.info(f"Gemini requested tool execution: {fn_name} with args {fn_args}")
-                    yield f"\n*[SysAgent is running tool `{fn_name}`...]*\n"
+                    args_str = f" with args {fn_args}" if fn_args else ""
+                    yield f"\n*[SysAgent is running tool `{fn_name}`{args_str}...]*\n"
                     
                     # Execute tool via Sandbox
                     result = self.sandbox.call_tool(fn_name, fn_args)

@@ -2,6 +2,8 @@
 
 SysAgent is a production-grade, AI-powered system intelligence CLI tool that communicates with your host computer's hardware and software configurations, audits security postures, generates dashboards, and lets you chat with your system in real time using Google Gemini.
 
+![SysAgent Interactive Chat Session](sysagent_repl.png)
+
 > [!NOTE]
 > **FREE to use** — fully powered by Google Gemini's free tier (gemini-2.0-flash).
 
