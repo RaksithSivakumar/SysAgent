@@ -188,3 +188,10 @@ black sysagent tests
 # Run linter checks
 ruff check sysagent tests
 ```
+
+---
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+

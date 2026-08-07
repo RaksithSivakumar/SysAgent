@@ -103,3 +103,10 @@ SysAgent uses the default model `gemini-2.0-flash` on the free tier:
 - **Rate Limit:** 15 Requests Per Minute (RPM)
 - **Daily Limit:** 1,500 Requests Per Day
 - **Full Scans:** Limited to maximum 1 scan per 60 seconds to prevent resource exhaustion.
+
+---
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](../LICENSE) file for details.
+
